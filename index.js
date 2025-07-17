@@ -55,7 +55,7 @@ const router = express.Router();
 
 // Hello World for index page
 app.get('/', function (req, res) {
-    return res.send("Hello in the World of DevOps!");
+    return res.send("Hello in the World of DevOps! VSN INTERNATIONAL PVT. LTD");
 })
 
 app.get('/api', function (req, res) {
