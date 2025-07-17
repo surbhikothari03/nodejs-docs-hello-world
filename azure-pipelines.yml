@@ -2,7 +2,9 @@ trigger:
 - main
 
 pool:
-  name: Default   # Self-hosted agent pool
+  name: Default
+  demands:
+    - Agent.Name -equals lba-vm2
 
 variables:
   appName: 'my-nodejs-app'
@@ -16,7 +18,7 @@ steps:
     echo "Agent OS: $(Agent.OS)"
   displayName: 'Display Agent Info'
 
-# Use specific Node.js version
+# Install specific Node.js version
 - task: NodeTool@0
   inputs:
     versionSpec: '$(nodeVersion)'
@@ -27,12 +29,12 @@ steps:
     npm install
   displayName: 'Install npm dependencies'
 
-# Run tests (optional — only if your app has tests)
+# Run tests (optional)
 - script: |
     npm test || echo "No tests found"
-  displayName: 'Run tests'
+  displayName: 'Run Tests'
 
-# Start the app (for test/demo; not recommended for prod)
+# Start the app (only for testing/demo purposes)
 - script: |
     npm start
-  displayName: 'Start Node.js App'
+  displayName: 'Start the App'
