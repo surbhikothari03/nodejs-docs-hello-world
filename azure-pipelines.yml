@@ -5,7 +5,7 @@ pool:
   vmImage: ubuntu-latest
 
 variables:
-  azureSubscription: '<your-azure-sub-name>'
+  azureSubscription: '9ffb2008-f6d1-4cea-b83e-f758fa817008'
   appName: 'my-web-app-devops'
   packageDir: '.'
 
@@ -35,6 +35,6 @@ steps:
 
 - task: AzureWebApp@1
   inputs:
-    azureSubscription: '<your-service-connection-name>'
+    azureSubscription: 'Myconnection'
     appName: '$(appName)'
     package: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
