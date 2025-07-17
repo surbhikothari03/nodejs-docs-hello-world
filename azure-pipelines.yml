@@ -2,39 +2,37 @@ trigger:
 - main
 
 pool:
-  vmImage: ubuntu-latest
+  name: Default   # Self-hosted agent pool
 
 variables:
-  azureSubscription: '9ffb2008-f6d1-4cea-b83e-f758fa817008'
-  appName: 'my-web-app-devops'
-  packageDir: '.'
+  appName: 'my-nodejs-app'
+  nodeVersion: '16.x'
 
 steps:
+
+# Show the agent details
+- script: |
+    echo "Running on agent: $(Agent.Name)"
+    echo "Agent OS: $(Agent.OS)"
+  displayName: 'Display Agent Info'
+
+# Use specific Node.js version
 - task: NodeTool@0
   inputs:
-    versionSpec: '14.x'
+    versionSpec: '$(nodeVersion)'
   displayName: 'Install Node.js'
 
+# Install dependencies
 - script: |
     npm install
-    npm run build || echo "No build step"
-  displayName: 'Install dependencies'
+  displayName: 'Install npm dependencies'
 
-- task: ArchiveFiles@2
-  inputs:
-    rootFolderOrFile: '$(Build.SourcesDirectory)'
-    includeRootFolder: false
-    archiveType: 'zip'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
-    replaceExistingArchive: true
+# Run tests (optional — only if your app has tests)
+- script: |
+    npm test || echo "No tests found"
+  displayName: 'Run tests'
 
-- task: PublishBuildArtifacts@1
-  inputs:
-    pathToPublish: '$(Build.ArtifactStagingDirectory)'
-    artifactName: 'drop'
-
-- task: AzureWebApp@1
-  inputs:
-    azureSubscription: 'Myconnection'
-    appName: '$(appName)'
-    package: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+# Start the app (for test/demo; not recommended for prod)
+- script: |
+    npm start
+  displayName: 'Start Node.js App'
